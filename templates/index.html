@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Tracker</title>
+    <style>
+        body {
+            background-image: url('/static/images/background_image1.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Tracker</h1>
+        <form method="POST">
+            <input type="text" name="city" placeholder="Enter city name">
+            <input type="submit" value="Get Weather">
+        </form>
+        {% if weather_data %}
+            <h2>Weather in {{ weather_data.city }}</h2>
+            <p>Condition: {{ weather_data.weather }}</p>
+            <p>Temperature: {{ weather_data.temperature }}°F</p>
+            <p>Humidity: {{ weather_data.humidity }}%</p>
+            <p>Wind Speed: {{ weather_data.wind_speed }} mph</p>
+        {% endif %}
+    </div>
+</body>
+</html> 
