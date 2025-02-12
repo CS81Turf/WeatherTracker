@@ -6,7 +6,7 @@
     <title>Weather Tracker</title>
     <style>
         body {
-            background-image: url('/static/images/background_image1.jpeg');
+            background-image: url('images/images/background_image1.jpeg');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -35,22 +35,49 @@
             color: white;
             cursor: pointer;
         }
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Weather Tracker</h1>
-        <form method="POST">
-            <input type="text" name="city" placeholder="Enter city name">
+        <form id="weatherForm">
+            <input type="text" id="cityInput" placeholder="Enter city name">
             <input type="submit" value="Get Weather">
         </form>
-        {% if weather_data %}
-            <h2>Weather in {{ weather_data.city }}</h2>
-            <p>Condition: {{ weather_data.weather }}</p>
-            <p>Temperature: {{ weather_data.temperature }}°F</p>
-            <p>Humidity: {{ weather_data.humidity }}%</p>
-            <p>Wind Speed: {{ weather_data.wind_speed }} mph</p>
-        {% endif %}
+        <div id="weatherResult"></div>
     </div>
+
+    <script>
+        document.getElementById('weatherForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const city = document.getElementById('cityInput').value;
+            const apiKey = '0cbce788f0bdef30e73a41a212f7b560'; // Replace with your OpenWeatherMap API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=imperial`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('City not found. Please try again.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const weatherResult = document.getElementById('weatherResult');
+                    weatherResult.innerHTML = `
+                        <h2>Weather in ${data.name}</h2>
+                        <p>Condition: ${data.weather[0].description}</p>
+                        <p>Temperature: ${data.main.temp}°F</p>
+                        <p>Humidity: ${data.main.humidity}%</p>
+                        <p>Wind Speed: ${(data.wind.speed * 2.237).toFixed(2)} mph</p>
+                    `;
+                })
+                .catch(error => {
+                    document.getElementById('weatherResult').innerHTML = `<p class="error">${error.message}</p>`;
+                });
+        });
+    </script>
 </body>
 </html> 
